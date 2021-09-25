@@ -9,10 +9,13 @@
 
 struct option long_options[]={
 	{"force",no_argument,NULL,'f'},
+	{"recursive", no_argument, NULL, 'r'},
+	{"dir", no_argument, NULL, 'd'},
 	{NULL,0,NULL,0}
 };
 int recursive = 0;
 int rmdir_flag = 0;
+int force_flag = 0;
 
 int rmdir_recursive(char* name);
 
@@ -36,6 +39,10 @@ int main(int argc, char** argv)
 				rmdir_flag = 1;
 				break;
 			case 'f':
+				force_flag = 1;
+				break;
+			case 'd':
+				rmdir_flag = 1;
 				break;
 		}
 	}
@@ -45,6 +52,7 @@ int main(int argc, char** argv)
 		struct stat file_stat;
 		if (0 != stat(argv[i], &file_stat))
 		{
+			if (force_flag)continue;
 			fprintf(stderr, "can not open file %s", argv[i]);
 			perror(" ");
 		}

@@ -1,4 +1,7 @@
-all: ls rm cat sleep
+DESTDIR=
+PREFIX=~/.local/bin
+program=ls rm cat sleep mkdir
+all: ${program}
 
 ls : ls.c
 	gcc ls.c -o ls
@@ -12,14 +15,17 @@ cat : cat.c
 sleep : sleep.c
 	gcc sleep.c -o sleep
 
-install : ls rm
-	install ls ~/.local/bin
-	install rm ~/.local/bin
-	install cat ~/.local/bin
-	install sleep ~/.local/bin
+clean:
+	for prog in ${program}; do \
+		rm --force $$prog; \
+	done
+
+install : all
+	for prog in ${program}; do \
+		install $$prog ${DESTDIR}${PREFIX}; \
+	done
 
 uninstall:
-	rm --force ~/.local/bin/rm
-	rm --force ~/.local/bin/ls
-	rm --force ~/.local/bin/cat
-	rm --force ~/.local/bin/sleep
+	for prog in ${program}; do \
+		rm --force ~/.local/bin/$$prog; \
+	done
