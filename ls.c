@@ -11,6 +11,8 @@ struct option options[]={
 	{NULL, 0, NULL, 0},
 };
 
+int all_flag = 0;
+
 int main(int argc, char** argv)
 {
 	while (1)
@@ -34,9 +36,9 @@ int main(int argc, char** argv)
 		}
 	}
 	const char* path = ".";
-	if (argc == 2)
+	if (optind != argc)
 	{
-		path = argv[1];
+		path = argv[optind];
 	}
 	DIR* dir = opendir(path);
 	if (dir != NULL)
@@ -46,7 +48,15 @@ int main(int argc, char** argv)
 		{
 			if (0 == strcmp(dir_entry->d_name, "."))continue;
 			if (0 == strcmp(dir_entry->d_name, ".."))continue;
-			printf("%s  ", dir_entry->d_name);
+			if (dir_entry->d_name[0] == '.')continue;
+			if (dir_entry->d_type == DT_DIR)
+			{
+				printf("\x1b[34m%s\x1b[0m  ", dir_entry->d_name);
+			}
+			else
+			{
+				printf("%s  ", dir_entry->d_name);
+			}
 		}
 		closedir(dir);
 	}
