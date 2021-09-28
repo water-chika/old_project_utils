@@ -1,6 +1,6 @@
 DESTDIR=
 PREFIX=~/.local/bin
-program=ls rm cat sleep mkdir chroot pwd cp
+program=ls rm cat sleep mkdir chroot pwd cp echo
 all: ${program}
 
 ls : ls.c
